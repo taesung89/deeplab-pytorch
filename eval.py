@@ -5,7 +5,7 @@
 # URL:      http://kazuto1011.github.io
 # Created:  2017-11-03
 
-from __future__ import absolute_import, division, print_function
+
 
 import json
 import os.path as osp
@@ -110,7 +110,7 @@ def main(config, model_path, cuda, crf):
 
     score, class_iou = scores(targets, outputs, n_class=CONFIG.N_CLASSES)
 
-    for k, v in score.items():
+    for k, v in list(score.items()):
         print(k, v)
 
     score['Class IoU'] = {}

@@ -5,7 +5,7 @@
 # URL:      http://kazuto1011.github.io
 # Created:  2018-03-20
 
-from __future__ import absolute_import, division, print_function
+
 
 import click
 import cv2

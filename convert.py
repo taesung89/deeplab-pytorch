@@ -5,7 +5,7 @@
 # URL:      http://kazuto1011.github.io
 # Created:  2017-11-15
 
-from __future__ import absolute_import, division, print_function
+
 
 import re
 from collections import OrderedDict
@@ -149,8 +149,8 @@ def main(dataset):
     own_state = model.state_dict()
 
     state_dict = OrderedDict()
-    for layer_name, layer_dict in params.items():
-        for param_name, values in layer_dict.items():
+    for layer_name, layer_dict in list(params.items()):
+        for param_name, values in list(layer_dict.items()):
             if param_name in WHITELIST and dataset != 'coco_init' and dataset != 'init':
                 attribute = translate_layer_name(layer_name)
                 attribute = eval('model.' + attribute + '.' + param_name)

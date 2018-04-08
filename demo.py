@@ -5,7 +5,7 @@
 # URL:      http://kazuto1011.github.io
 # Created:  2017-11-15
 
-from __future__ import absolute_import, division, print_function
+
 
 import click
 import cv2
@@ -102,6 +102,7 @@ def main(config, image_path, model_path, cuda, crf):
         ax.set_yticks([])
 
     plt.tight_layout()
+    plt.savefig('demo.jpg')
     plt.show()
 
 

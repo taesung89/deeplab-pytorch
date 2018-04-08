@@ -11,7 +11,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from resnet import _ConvBatchNormReLU, _ResBlock
+from .resnet import _ConvBatchNormReLU, _ResBlock
 
 
 class _ASPPModule(nn.Module):
@@ -63,7 +63,7 @@ class DeepLabV2(nn.Sequential):
         self.add_module('layer3', _ResBlock(n_blocks[1], 256, 128, 512, 2, 1))
         self.add_module('layer4', _ResBlock(n_blocks[2], 512, 256, 1024, 1, 2))
         self.add_module('layer5', _ResBlock(n_blocks[3], 1024, 512, 2048, 1, 4))
-        self.add_module('aspp', _ASPPModule(2048, n_classes, pyramids))
+        self.add_module('aspp_' + str(n_classes), _ASPPModule(2048, n_classes, pyramids))
 
     def forward(self, x):
         return super(DeepLabV2, self).forward(x)
@@ -75,9 +75,9 @@ class DeepLabV2(nn.Sequential):
 
 
 if __name__ == '__main__':
-    from msc import MSC
+    from .msc import MSC
     model = MSC(DeepLabV2(n_classes=21, n_blocks=[3, 4, 23, 3], pyramids=[6, 12, 18, 24]))
     model.eval()
-    print list(model.named_children())
+    print(list(model.named_children()))
     image = torch.autograd.Variable(torch.randn(1, 3, 513, 513))
-    print model(image)[0].size()
+    print(model(image)[0].size())

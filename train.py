@@ -5,7 +5,7 @@
 # URL:      http://kazuto1011.github.io
 # Created:  2017-11-01
 
-from __future__ import absolute_import, division, print_function
+
 
 import os.path as osp
 
@@ -140,7 +140,7 @@ def main(config, cuda):
     model.module.scale.freeze_bn()
 
     for iteration in tqdm(
-        range(1, CONFIG.ITER_MAX + 1),
+        list(range(1, CONFIG.ITER_MAX + 1)),
         total=CONFIG.ITER_MAX,
         leave=False,
         dynamic_ncols=True,
@@ -174,7 +174,9 @@ def main(config, cuda):
             loss = 0
             for output in outputs:
                 # Resize target for {100%, 75%, 50%, Max} outputs
+                #print(target.min())                
                 target_ = resize_target(target, output.size(2))
+                #print(target.max())
                 target_ = target_.cuda() if cuda else target_
                 target_ = Variable(target_)
                 # Compute crossentropy loss

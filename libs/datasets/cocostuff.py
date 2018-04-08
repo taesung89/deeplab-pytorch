@@ -42,7 +42,7 @@ class CocoStuff10k(data.Dataset):
         self.files = defaultdict(list)
         self.images = []
         self.labels = []
-        self.ignore_label = -1
+        self.ignore_label = 0
 
         # Load all path to images
         for split in ["train", "test", "all"]:
@@ -80,19 +80,19 @@ class CocoStuff10k(data.Dataset):
                 if pad_h > 0 or pad_w > 0:
                     image = cv2.copyMakeBorder(
                         image,
-                        pad_h / 2,
-                        pad_h - pad_h / 2,
-                        pad_w / 2,
-                        pad_w - pad_w / 2,
+                        pad_h // 2,
+                        pad_h - pad_h // 2,
+                        pad_w // 2,
+                        pad_w - pad_w // 2,
                         cv2.BORDER_CONSTANT,
-                        value=(0.0, 0.0, 0.0),
+                        value=(0, 0, 0),
                     )
                     label = cv2.copyMakeBorder(
                         label,
-                        pad_h / 2,
-                        pad_h - pad_h / 2,
-                        pad_w / 2,
-                        pad_w - pad_w / 2,
+                        pad_h // 2,
+                        pad_h - pad_h // 2,
+                        pad_w // 2,
+                        pad_w - pad_w // 2,
                         cv2.BORDER_CONSTANT,
                         value=(self.ignore_label, ),
                     )
@@ -119,7 +119,7 @@ class CocoStuff10k(data.Dataset):
         # Load a label map
         if _VERSION == '1.1':
             label = sio.loadmat(label_path)['S'].astype(np.int64)
-            label -= 1  # unlabeled (0 -> -1)
+            #label -= 1  # unlabeled (0 -> -1)
         else:
             label = np.array(h5py.File(label_path, 'r')['S'], dtype=np.int64).transpose(1, 0)
             label -= 2  # unlabeled (1 -> -1)
