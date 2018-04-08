@@ -11,7 +11,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .resnet import _ConvBatchNormReLU, _ResBlock, _ResBlockMG
+from resnet import _ConvBatchNormReLU, _ResBlock, _ResBlockMG
 
 
 class _ASPPModule(nn.Module):
@@ -71,15 +71,17 @@ class DeepLabV3(nn.Sequential):
         return super(DeepLabV3, self).forward(x)
 
     def freeze_bn(self):
-        for m in self.modules():
-            if isinstance(m, nn.BatchNorm2d):
-                m.eval()
+        for m in self.named_modules():
+            if 'layer' in m[0]:
+                if isinstance(m[1], nn.BatchNorm2d):
+                    print m[0]
+                    m[1].eval()
 
 
 if __name__ == '__main__':
-    from .msc import MSC
-    model = MSC(DeepLabV3(n_classes=21, n_blocks=[3, 4, 23, 3], pyramids=[6, 12, 18]))
+    model = DeepLabV3(n_classes=21, n_blocks=[3, 4, 23, 3], pyramids=[6, 12, 18])
+    model.freeze_bn()
     model.eval()
-    print(list(model.named_children()))
+    print list(model.named_children())
     image = torch.autograd.Variable(torch.randn(1, 3, 513, 513), volatile=True)
-    print(model(image)[0].size())
+    print model(image)[0].size()
